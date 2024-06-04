@@ -21,12 +21,11 @@ public class PlayerController : MonoBehaviour
 
     private void Move(Vector2 mouse)
     {
-        var newY = mouse.y;
-        if (newY > _bounds)
-            newY = _bounds;
-        else if (newY < -_bounds)
-            newY = -_bounds;
+        transform.position = new Vector2(transform.position.x, mouse.y);
 
-        transform.position = new Vector2(transform.position.x, newY);
+        if (transform.position.y > _bounds)
+            transform.position = new Vector2(transform.position.x, _bounds);
+        else if (transform.position.y < -_bounds)
+            transform.position = new Vector2(transform.position.x, -_bounds);
     }
 }
