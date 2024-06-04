@@ -5,6 +5,9 @@ using UnityEngine;
 public class BallController : MonoBehaviour
 {
     private readonly float _startSpeed = 10f;
+    private readonly float _xBounds = 8f;
+    private readonly float _speedIncrement = .5f;
+    private float _currentSpeed = 10f;
     private Rigidbody2D _rb;
 
     private void Start()
@@ -13,17 +16,39 @@ public class BallController : MonoBehaviour
         StartMoving();
     }
 
+    private void Update()
+    {
+        CheckForPoint();
+    }
+
     public void StartMoving()
     {
         Vector2 startDirection = new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f)).normalized;
+        _currentSpeed = _startSpeed;
         _rb.velocity = startDirection * _startSpeed;
+    }
+
+    private void CheckForPoint()
+    {
+        if (transform.position.x > _xBounds)
+        {
+            GameManager.Instance.PlayerPoint();
+            _rb.velocity = Vector2.zero;
+        }
+        else if (transform.position.x < -_xBounds)
+        {
+            GameManager.Instance.ComputerPoint();
+            _rb.velocity = Vector2.zero;
+        }
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.collider.CompareTag("Solid"))
+        if (collision.collider.CompareTag("Paddle"))
         {
-            // _rb.velocity = Vector2.Reflect(_rb.velocity, collision.contacts[0].normal);
+            _currentSpeed += _speedIncrement;
+            var currentDirection = _rb.velocity.normalized;
+            _rb.velocity = currentDirection * _currentSpeed;
         }
     }
 }
