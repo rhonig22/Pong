@@ -4,16 +4,16 @@ using UnityEngine;
 
 public class BallController : MonoBehaviour
 {
+    [SerializeField] AudioClip _bounceSound;
     private readonly float _startSpeed = 10f;
     private readonly float _xBounds = 8f;
-    private readonly float _speedIncrement = .5f;
+    private readonly float _speedIncrement = .2f;
     private float _currentSpeed = 10f;
     private Rigidbody2D _rb;
 
     private void Start()
     {
         _rb = GetComponent<Rigidbody2D>();
-        StartMoving();
     }
 
     private void Update()
@@ -44,11 +44,9 @@ public class BallController : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.collider.CompareTag("Paddle"))
-        {
-            _currentSpeed += _speedIncrement;
-            var currentDirection = _rb.velocity.normalized;
-            _rb.velocity = currentDirection * _currentSpeed;
-        }
+        SoundManager.Instance.PlaySound(_bounceSound, transform.position);
+        _currentSpeed += _speedIncrement;
+        var currentDirection = _rb.velocity.normalized;
+        _rb.velocity = currentDirection * _currentSpeed;
     }
 }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ComputerController : MonoBehaviour
 {
-    private readonly float _speed = 8f;
+    private readonly float _speed = 7f;
     private readonly float _bounds = 3.75f;
     private GameObject _ball;
     // Start is called before the first frame update
